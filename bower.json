@@ -1,0 +1,24 @@
+{
+  "name": "webapp",
+  "homepage": "https://github.com/huangpuyuan/app_angularJS",
+  "authors": [
+    "kaitai"
+  ],
+  "description": "angularjs webapp --kaitai",
+  "main": "",
+  "keywords": [
+    "angular",
+    "js"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.3"
+  }
+}
