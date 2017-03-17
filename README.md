@@ -130,3 +130,33 @@ $state.go('main',{id:contact.id},{location:'replace'});
 $state.params.id <===> $stateParams.id
 //参数
 ```
+
+###数据绑定
+* JS代码 `$scope` 
+* HTML标签 `{{xxxx}}`
+
+### 指令directive
+
+>定义：通过HTML__标签__、__属性__、__样式__、__注释__使Angular编译器来指定的DOM元素绑定特性的行为，甚至是改变DOM元素和它的子元素
+
+* 内置指令 controller 下定义$scope
+	* `ng-model` 变量和元素的value值进行绑定
+	* `ng-bind`  变量和元素的innerTest的下的数据
+	* `ng-click` 事件的指令`ng-mouse`等等
+	* `ng-class` 字符串的className 用于动态改变元素的效果 
+	* `ng-if` 条件为真值的是否创建
+ 	* `ng-hide` `ng-show`隐藏显示
+	* `ng-repeat` 循环生成元素 如：item in data。 $first? $last?
+	* ...
+* 自定义指令常用属性 dirctive下定义
+	* `restrict` 有四种方式
+		* 元素的方式 `E`
+		* 属性的方式 `A` 默认的方式 比较常用-- 后面两种不常用
+		* 注释的方式 `M`
+		* 样式的方式 `C`
+	* `replace` 为__true__的时候替代父元素	
+	* `scope`  神奇的scope属性 默认为false  直接用的$scope上的属性值。缺点是不能复用。所以给一个true值。用的最多的是json对象的形式例如 ` scope:{ aa:'@', bb:'=' , cc:'&' }` '@' --直接接收字符串或者转义, 本质是给指令暴露一组接口 '='传入一个变量，'&'传入一个回调函数--注意的一点是传参数。
+	* `template` 模板
+	* `templateUrl` 指向一个地址静态的。
+	* `link` 提供事件的交互 `function(scope,element,attr){ scope. }`
+	* `transclude` __true__的时候内嵌HTML模板
