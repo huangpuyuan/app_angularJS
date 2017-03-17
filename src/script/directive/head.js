@@ -3,7 +3,7 @@
 angular.module('app').directive('appHead', [function(){
     return {
     	restrict:'A',
-    	repalce:true,
+    	replace:true,
     	templateUrl: 'view/template/head.html'
 
     }
