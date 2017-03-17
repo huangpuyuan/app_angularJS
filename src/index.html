@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
+
 <head>
-	<meta charset="UTF-8">
-	<title>gulp</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>WebApp</title>
+    <link rel="stylesheet" href="/css/index.css" media="screen">
 </head>
+
 <body>
-	<h2>gulp自动化构建工具的使用</h2>	
+    <div ui-view>
+    </div>
+    <script>
+    document.getElementsByTagName('html')[0].style.fontSize = window.screen.width / 10 + 'px';
+    </script>
+    <script src="vendor/angular/angular.min.js" charset="utf-8"></script>
+    <script src="vendor/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="js/index.js"></script>
 </body>
+
 </html>

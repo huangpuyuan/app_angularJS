@@ -27,7 +27,7 @@ gulp.task('json', function() {
     gulp.src(app.srcPath + 'data/**/*.json')
         .pipe(gulp.dest(app.devPath + 'data'))
         .pipe(gulp.dest(app.prdPath + 'data'))
-        .pipe($.connect.reload()); //深度遍历文件
+        .pipe($.connect.reload()); 
 });
 
 gulp.task('less', function() {
@@ -78,7 +78,7 @@ gulp.task('serve', ['build'], function() {
 
     gulp.watch(app.srcPath + '**/*.html', ['html']);
     gulp.watch(app.srcPath + 'data/**/*.json', ['json']);
-    gulp.watch(app.srcPath + 'style/**/*.js', ['less']);
+    gulp.watch(app.srcPath + 'style/**/*.less', ['less']);
     gulp.watch(app.srcPath + 'script/**/*.js', ['js']);
     gulp.watch(app.srcPath + 'image/**/*', ['image']);
 })
