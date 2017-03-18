@@ -1,11 +1,17 @@
-# app_angularJS
-using angular JS to design a app~~~~~~~~~
+# 使用AngularJS实现单页应用
+>整理By--[开泰](https://huangpuyuan.github.io/myExercises-FrontEnd)
 
+* 学习方式： 编写代码-->理解知识
+* 开发流程： 搭建环境-->编写逻辑
+* 进一步学习： [官网](https://angularjs.org/)的 [开发者指南](https://docs.angularjs.org/guide)、[ApI文档](https://docs.angularjs.org/api).
+* 书籍： <<AngularJs权威教程>>
+* 社区： [AngularJS中文社区](http://angularjs.cn/)
+* 博客：破狼 徐飞
 ### 单页应用
 
 * 定义: 页面跳转不刷新
 * 方法: 利用路由控制“页面”跳转 --监控页面的Url的哈希值进行跳转。
-* 优点：页面切换流畅、完全的前后端的分离
+* 优点: 页面切换流畅、完全的前后端的分离
 
 
 
@@ -52,13 +58,13 @@ using angular JS to design a app~~~~~~~~~
 
 ### Angular基本概念
 > Angular Js的常用概念 :  
-__module__ __directive__ 表达式 __service__ injector 依赖注入 模型 __filter__ 依赖注入 模型 filter 数据绑定 $scope __controller__ view
+__module__ __directive__ 表达式 __service__ injector 依赖注入  模型 filter 数据绑定 $scope __controller__ view
 	
 >* 核心概念：
-	* _module_ : “魔法书” ;
-	* _directive_: “召唤魔法” ;
-	* _controller_: “辅助魔法” ;
-	* _service_：“攻击魔法” ;
+	* _module_ : “魔法书”  __模块__;
+	* _directive_: “召唤魔法”  __指令__;
+	* _controller_: “辅助魔法” __控制器__;
+	* _service_：“攻击魔法” __服务__;
 
 
 ### Angular Web App 结构图
@@ -131,11 +137,11 @@ $state.params.id <===> $stateParams.id
 //参数
 ```
 
-###数据绑定
+### 数据绑定
 * JS代码 `$scope` 
 * HTML标签 `{{xxxx}}`
 
-### 指令directive
+### 指令directive总结
 
 >定义：通过HTML__标签__、__属性__、__样式__、__注释__使Angular编译器来指定的DOM元素绑定特性的行为，甚至是改变DOM元素和它的子元素
 
@@ -160,3 +166,105 @@ $state.params.id <===> $stateParams.id
 	* `templateUrl` 指向一个地址静态的。
 	* `link` 提供事件的交互 `function(scope,element,attr){ scope. }`
 	* `transclude` __true__的时候内嵌HTML模板
+
+
+### 控制器与作用域总结
+
+>职位模块 控制器controller 和作用域（$scope）
+	
+* 控制器：视图对应的业务逻辑，为数据模型添加行为和属性
+* 常用属性:
+	* $id 唯一标识 和scope对象 是一一对应的关系
+	* $parent 是scope的父作用域 当我们的控制器发生嵌套的时候就会产生父子作用域，当我们使用指令的时候也会产生父子作用域
+	* $root 一般是指向模块的$root scope 根元素$id为1-----~~
+* 常用函数
+	* $watch 监控scope上属性发生变化
+
+
+	```javascript
+
+	//监听$scope对像上的属性 当scope发生变化的时候调用传入的函数
+	$scope.$watch('com',function(newVal,oldVal,scope){
+		if(newVal) $scoope.showPositionList(0);
+	});
+
+	```
+
+	* $on 用来接收这个事件 接收的时候需要考虑接收方是否初始化完成了
+	* $broadcast 向下进行广播 传给子集
+
+	```javascript
+	//在父作用域的ajax（只是先让子集先初始化完成）中写一个广播的事件。
+	//广播是无状态的，广播只是通知事件的接收方，不需要知道对方有没有收到这个信息。
+	//例如向下广播一个'abc'的事件
+	$http.get('data/company.json?id='+$state.params.id).then(function(resp){
+		$scope.company = resp.data;
+		$scope.$broadcast('abc',{id:1});
+	});
+
+	//然后在子集的derective里接收这个事件，还有一个坑就是。子集没有初始化完成和父作用域已经广播完毕的话 就接收不到了。
+	$scope.$on('abc',function(event,data){
+    			console.log(event,data);
+    });
+    //结果是Object {name: "abc", targetScope: b, defaultPrevented: false, currentScope: m}
+    // Object {id: 1}
+	```
+
+	* $emit 向上进行广播(或向上冒泡一个事件) 传给父集
+
+	```javascript
+
+	//同理，先在子集中冒泡一个'cba'的事件
+	$scope.$emit('cba',{name:2});
+	//接的时候同样需要考虑接收方是否初始化完成了
+	$scope.$on('abc',function(event,data){
+    			console.log(event,data);
+    });
+
+    //结果：Object {name: "cba", targetScope: m, defaultPrevented: false, currentScope: b} 
+    //Object {name: 2}
+	```
+	* $digest 当双向数据绑定失效时进行使用
+
+
+### 服务总结
+
+> 职位模块--服务（service）和服务工厂（factory)
+
+* 服务的特性
+	* 单例
+	* 懒加载(lazyLoad)
+	* 公用函数
+* 常用的服务
+	* $http 服务 发出AJAX请求
+		* get方法 `$http.get('/someUrl', config).then(successCallback, errorCallback);`
+		* post方法 `$http.post('/someUrl', data, config).then(successCallback, errorCallback);`
+		* put方法 
+		* delete方法等等
+		* 参数`('url',{//数据对象},{//配置对象})`
+		* $http方法 `$http({ url:'',method:'',params:{},data:{},...}).then(function successCallback(response) {
+			// 请求成功执行代码
+		}, function errorCallback(response) {
+			// 请求失败执行代码
+		});` 
+	    * v1.5 中$http 的 success 和 error 方法已废弃。使用 then 方法替代。
+	* $q 解决一些异步的问题处理并发请求 按顺序进行。也就是promise机制
+	* $timeout 延迟执行
+	* $interval 循环执行
+	* $rootScope $scope对象的祖先
+* 自定义服务cache服务
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
