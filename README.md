@@ -252,8 +252,64 @@ $state.params.id <===> $stateParams.id
 	* $timeout 延迟执行
 	* $interval 循环执行
 	* $rootScope $scope对象的祖先
-* 自定义服务cache服务
+* 自定义服务
+	* cache服务
 
+	```javascript
+
+	//首先在app.js 声明一个依赖'ngCookies'和router一样
+
+	angular.module('app',['ui.router','ngCookies']);
+	
+	//然后 service里声明这个服务
+
+	angular.module('app').service('cache',['$cookies',function($cookies){
+		this.put = function(key,value){
+			$cookies.put(key,value);
+		}
+		
+		this.get = function(key){
+			return $cookies.get(key);
+		};
+
+		this.remove = function(key){
+			 $cookies.remove(key);
+		};
+	}]);
+	
+	//最后在controller里调用这个服务cache。
+	
+	angular.module('app')
+		.controller('positionCtrl', ['$q', '$http', '$state', '$scope','cache', function($q, $http, $state, $scope,cache) {	    
+		    cache.put('to','day');
+		    console.log(cache.get('to'));
+
+    }]);    
+
+	```
+
+	* 用factory声明服务 和服务类似，只是返回一个对象。
+
+	```javascript
+
+	//然后 service里声明cache服务
+
+	angular.module('app')
+	 .factory('cache',['$cookies',function($cookies){
+		return{
+				put:function(key,value){
+					$cookies.put(key,value);
+				},
+				get:function(key){
+					return $cookies.get(key);
+				},
+				remove:function(key){
+		 		 	$cookies.remove(key);
+		 		}
+		}
+	 }]);
+
+	```
 
 
 

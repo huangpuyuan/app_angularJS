@@ -1,5 +1,9 @@
 "use strict";
-angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$scope', function($q, $http, $state, $scope) {
+angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$scope','cache', function($q, $http, $state, $scope,cache) {
+    
+    cache.put('to','you');
+    console.log(cache.get('to'));    
+
     $scope.isLogin = false;
 
     function getPosition() {
