@@ -1,0 +1,37 @@
+.search-bar {
+    background-color: @headBgColor;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top:0;
+    .h(40);
+    .lh(40);
+    img {
+        -webkit-transform: scale(.6);
+        transform: scale(.6);
+        padding-bottom: 5px;
+    }
+    input {
+        background-color: @bodyBgColor;
+        border-radius: 50px;
+        border-style: none;
+        outline-with: 0;
+        .pl(20);
+        .w(190);
+        .h(25);
+        box-sizing: border-box;
+    }
+    button {
+        background-color: @headBgColor;
+        &:first-child {
+            color: @defaultColor;
+        }
+        &:last-child {
+            color: @muteColor;
+        }
+    }
+}
+
+.search-list {
+    .mt(80);
+}
