@@ -4,20 +4,38 @@
 
 'use strict';
 
+angular.module('app').value('dict', {}).run(['$http','dict', function($http,dict) {
+    $http.get('data/city.json').then(function(resp) {
+        dict.city = resp.data;
+    });
+    $http.get('data/salary.json').then(function(resp) {
+        dict.salary = resp.data;
+    });
+    $http.get('data/scale.json').then(function(resp) {
+        dict.scale = resp.data;
+    });
+}]);
+
+'use strict';
+
 angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('main', {
         url: '/main',
         templateUrl: 'view/main.html',
         controller: 'mainCtrl'
-    }).state('position',{
-    	url: '/position/:id',
-    	templateUrl: 'view/position.html',
-    	controller: 'positionCtrl'
-    }).state('company',{
-    	url:'/company/:id',
-    	templateUrl:'view/company.html',
-    	controller:'companyCtrl'
+    }).state('position', {
+        url: '/position/:id',
+        templateUrl: 'view/position.html',
+        controller: 'positionCtrl'
+    }).state('company', {
+        url: '/company/:id',
+        templateUrl: 'view/company.html',
+        controller: 'companyCtrl'
+    }).state('search', {
+        url: '/search',
+        templateUrl: 'view/search.html',
+        controller: 'searchCtrl'
     });
 
     $urlRouterProvider.otherwise('main');
@@ -30,9 +48,9 @@ angular.module('app').controller('companyCtrl',['$http','$state','$scope',functi
 		$scope.$broadcast('abc',{id:1});
 	});
 
-	$scope.$on('cba',function(event,data){
-		console.log(event,data);
-	})
+	// $scope.$on('cba',function(event,data){
+
+	// })
 
 }]);
 "use strict";
@@ -88,9 +106,45 @@ angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$sco
         });
     };
     getPosition().then(function(obj) {
-    	console.log(obj);
+    	//console.log(obj);
         getCompany(obj.data.companyId);
     });
+}]);
+
+"use strict";
+angular.module('app').controller('searchCtrl', ['dict', '$scope', '$http', function(dict, $scope, $http) {
+    $scope.name = '';
+
+    $scope.search = function() {
+        $http.get('data/positionList.json?name=' + $scope.name).then(function(resp) {
+            $scope.positionList = resp.data;
+        });
+    };
+
+    $scope.search();
+
+    $scope.sheet = {};
+
+    $scope.tabList = [{
+        id: 'city',
+        name: '城市'
+    }, {
+        id: 'salary',
+        name: '薪水'
+    }, {
+        id: 'scale',
+        name: '公司规模'
+    }];
+
+    $scope.tClick = function(id, name) {
+        $scope.sheet.list = dict[id];
+        $scope.sheet.visible = true;
+    };
+
+    // $scope.sClick = function(id, name) {
+    //    console.log(id,name);
+    // };
+
 }]);
 
 'use strict';
@@ -199,6 +253,40 @@ angular.module('app').directive('appPositionList', [function() {
             data: '='
         }
     };
+}]);
+
+'use strict';
+angular.module('app').directive('appSheet',[function(){
+	return{
+		restrict:'A',
+		replace:true,
+		scope:{
+			list:"=",
+			visible:"=",
+			select:'&'
+		},
+		templateUrl:'view/template/sheet.html'
+	};
+}]);
+'use strict';
+
+angular.module('app').directive('appTab', [function() {
+    return {
+        restrict: 'A',
+        replace: true,
+        scope: {
+            list: '=',
+            tabClick: '&'
+        },
+        templateUrl: 'view/template/tab.html',
+        link: function($scope) {
+            $scope.click = function(tab) {
+                $scope.selectId = tab.id;
+                $scope.tabClick(tab);
+            };
+        }
+
+    }
 }]);
 
 'use strict';

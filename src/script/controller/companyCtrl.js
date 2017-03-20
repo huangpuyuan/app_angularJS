@@ -5,8 +5,8 @@ angular.module('app').controller('companyCtrl',['$http','$state','$scope',functi
 		$scope.$broadcast('abc',{id:1});
 	});
 
-	$scope.$on('cba',function(event,data){
-		console.log(event,data);
-	})
+	// $scope.$on('cba',function(event,data){
+
+	// })
 
 }]);

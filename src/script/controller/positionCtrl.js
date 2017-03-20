@@ -24,7 +24,7 @@ angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$sco
         });
     };
     getPosition().then(function(obj) {
-    	console.log(obj);
+    	//console.log(obj);
         getCompany(obj.data.companyId);
     });
 }]);

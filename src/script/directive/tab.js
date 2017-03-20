@@ -13,7 +13,7 @@ angular.module('app').directive('appTab', [function() {
             $scope.click = function(tab) {
                 $scope.selectId = tab.id;
                 $scope.tabClick(tab);
-            }
+            };
         }
 
     }
