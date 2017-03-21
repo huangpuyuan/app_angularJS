@@ -24,42 +24,42 @@ angular.module('app').controller('searchCtrl', ['dict', '$scope', '$http', funct
     }];
 
     var tabId = '';
-    $scope.filterObj={};
+    $scope.filterObj = {};
 
     $scope.tClick = function(id, name) {
-    	tabId = id;
+        tabId = id;
         $scope.sheet.list = dict[id];
         $scope.sheet.visible = true;
     };
 
     $scope.sClick = function(id, name) {
-       console.log(id,name);
-       if(id){
-       		angular.forEach($scope.tabList,function(item){
-       			if(item.id===tabId){
-       				item.name =name;
-       			}
-       		});
-       		$scope.filterObj[tabId +'Id'] = id;
-       }else{
-       		delete $scope.filterObj[tabId +'Id'];
-       		angular.forEach($scope.tabList,function(item){
-       			if(item.id===tabId){
-       				switch(item.id){
-       					case 'city': 
-       						item.name = '城市';
-       					 break;
-	   					case 'salary': 
-	   						item.name = '薪水';
-	   					 break;
-	   					case 'scale': 
-	   						item.name = '公司规模';
-	   				 	 break;	
-	   				 	default:
-       				}
-       			}
-       		})
-       }
+        //console.log(id, name);
+        if (id) {
+            angular.forEach($scope.tabList, function(item) {
+                if (item.id === tabId) {
+                    item.name = name;
+                }
+            });
+            $scope.filterObj[tabId + 'Id'] = id;
+        } else {
+            delete $scope.filterObj[tabId + 'Id'];
+            angular.forEach($scope.tabList, function(item) {
+                if (item.id === tabId) {
+                    switch (item.id) {
+                        case 'city':
+                            item.name = '城市';
+                            break;
+                        case 'salary':
+                            item.name = '薪水';
+                            break;
+                        case 'scale':
+                            item.name = '公司规模';
+                            break;
+                        default:
+                    }
+                }
+            })
+        }
     };
 
 }]);

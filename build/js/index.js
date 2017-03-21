@@ -36,6 +36,26 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
         url: '/search',
         templateUrl: 'view/search.html',
         controller: 'searchCtrl'
+    }).state('login', {
+        url: '/login',
+        templateUrl: 'view/login.html',
+        controller: 'loginCtrl'
+    }).state('register', {
+        url: '/register',
+        templateUrl: 'view/register.html',
+        controller: 'registerCtrl'
+    }).state('my', {
+        url: '/my',
+        templateUrl: 'view/my.html',
+        controller: 'myCtrl'
+    }).state('post', {
+        url: '/post',
+        templateUrl: 'view/post.html',
+        controller: 'postCtrl'
+    }).state('favorite', {
+        url: '/favorite',
+        templateUrl: 'view/favorite.html',
+        controller: 'favoriteCtrl'
     });
 
     $urlRouterProvider.otherwise('main');
@@ -53,6 +73,20 @@ angular.module('app').controller('companyCtrl',['$http','$state','$scope',functi
 	// })
 
 }]);
+"use strict";
+
+angular.module('app').controller('favoriteCtrl', ['$http', '$scope', function($http, $scope) {
+
+
+  }]);
+
+"use strict";
+
+angular.module('app').controller('loginCtrl', ['$http', '$scope', function($http, $scope) {
+
+
+  }]);
+
 "use strict";
 angular.module('app').controller('mainCtrl',['$http','$scope',function($http,$scope){
 	$http.get('data/positionList.json').then(function(resp){
@@ -80,6 +114,13 @@ angular.module('app').controller('mainCtrl',['$http','$scope',function($http,$sc
 	// }];
 
 }]);
+"use strict";
+
+angular.module('app').controller('myCtrl', ['$http', '$scope', function($http, $scope) {
+
+
+  }]);
+
 "use strict";
 angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$scope','cache', function($q, $http, $state, $scope,cache) {
     
@@ -112,6 +153,20 @@ angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$sco
 }]);
 
 "use strict";
+
+angular.module('app').controller('postCtrl', ['$http', '$scope', function($http, $scope) {
+
+
+  }]);
+
+"use strict";
+
+angular.module('app').controller('regisiterCtrl', ['$http', '$scope', function($http, $scope) {
+
+
+  }]);
+
+"use strict";
 angular.module('app').controller('searchCtrl', ['dict', '$scope', '$http', function(dict, $scope, $http) {
     $scope.name = '';
 
@@ -136,14 +191,44 @@ angular.module('app').controller('searchCtrl', ['dict', '$scope', '$http', funct
         name: '公司规模'
     }];
 
+    var tabId = '';
+    $scope.filterObj = {};
+
     $scope.tClick = function(id, name) {
+        tabId = id;
         $scope.sheet.list = dict[id];
         $scope.sheet.visible = true;
     };
 
-    // $scope.sClick = function(id, name) {
-    //    console.log(id,name);
-    // };
+    $scope.sClick = function(id, name) {
+        //console.log(id, name);
+        if (id) {
+            angular.forEach($scope.tabList, function(item) {
+                if (item.id === tabId) {
+                    item.name = name;
+                }
+            });
+            $scope.filterObj[tabId + 'Id'] = id;
+        } else {
+            delete $scope.filterObj[tabId + 'Id'];
+            angular.forEach($scope.tabList, function(item) {
+                if (item.id === tabId) {
+                    switch (item.id) {
+                        case 'city':
+                            item.name = '城市';
+                            break;
+                        case 'salary':
+                            item.name = '薪水';
+                            break;
+                        case 'scale':
+                            item.name = '公司规模';
+                            break;
+                        default:
+                    }
+                }
+            })
+        }
+    };
 
 }]);
 
@@ -250,7 +335,8 @@ angular.module('app').directive('appPositionList', [function() {
         replace: true,
         templateUrl: 'view/template/positionList.html',
         scope: {
-            data: '='
+            data: '=',
+            filterObj:'='
         }
     };
 }]);
@@ -286,6 +372,27 @@ angular.module('app').directive('appTab', [function() {
             };
         }
 
+    }
+}]);
+
+'use strict';
+
+angular.module('app').filter('filterByObj', [function() {
+    return function(list, obj) {	
+        var result = [];
+        angular.forEach(list, function(item) {
+            var isEqual = true;
+            for (var e in obj) {
+                if (item[e] !== obj[e]) {
+                    isEqual = false;
+                };
+            };
+            if (isEqual) {
+                result.push(item);
+            };
+
+        });
+        return result;
     }
 }]);
 

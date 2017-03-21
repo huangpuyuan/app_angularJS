@@ -65,7 +65,7 @@
   padding: 0;
 }
 .position-list .item {
-  margin: 0 ;
+  margin: 0;
   padding: 7px 5px;
   list-style: none;
   border-bottom: 1px solid #d4d4d4;
@@ -76,10 +76,18 @@
   margin-right: 13px;
 }
 .position-list .item .title {
-  margin: 0;
+  line-height: 0.66666667rem;
 }
 .position-list .item .text {
+  font-size: 0.37333333rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin: 0;
+}
+.position-list .item span.text {
+  margin-left: 0.53333333rem;
+  color: red;
 }
 .position-info {
   border-bottom: 1px solid #ccc;
@@ -217,6 +225,9 @@
 .d-ib {
   display: inline-block;
 }
+.d-i {
+  display: inline;
+}
 .d-b {
   display: block;
 }
@@ -297,6 +308,47 @@
 }
 .search-list {
   margin-top: 2.13333333rem;
+}
+.login {
+  background: url(../image/background.png) no-repeat;
+  background-size: 100% 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.login form {
+  margin-top: 6.93333333rem;
+}
+.login form input {
+  margin-left: auto;
+  margin-right: auto;
+  width: 8rem;
+  height: 1.06666667rem;
+  border-width: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  outline-width: 0;
+  color: #fff;
+}
+.login form input:first-child {
+  border-bottom: 1px solid #fff;
+}
+.login form button {
+  width: 8rem;
+  height: 0.93333333rem;
+  font-size: 20px;
+  font-weight: bold;
+}
+.login form button.login-btn {
+  margin-top: 75px;
+  background-color: #12d5b5;
+  color: #fff;
+}
+.login form button.resigter-btn {
+  margin-top: 20px;
+  background-color: rgba(18, 213, 181, 0.2);
+  color: #12d5b5;
 }
 html,
 body {

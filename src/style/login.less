@@ -1,0 +1,41 @@
+.login {
+    background: url(../image/background.png) no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    form {
+        .mt(260);
+        input {
+            margin-left: auto;
+            margin-right: auto;
+            .w(300);
+            .h(40);
+            border-width:0;
+            background-color: @formBgColor;
+            outline-width: 0;
+            color: @defaultColor;
+            &:first-child{
+            	border-bottom:1px solid @defaultColor; 
+            } 
+        }
+        button {
+            .w(300);
+            .h(35);
+            font-size: 20px;
+            font-weight: bold;
+            &.login-btn {
+                margin-top: 75px;
+                background-color: @headBgColor;
+                color: @defaultColor;
+            }
+            &.resigter-btn {
+                margin-top: 20px;
+                background-color: @btnBgColor;
+                color: @headBgColor;
+            }
+        }
+    }
+}

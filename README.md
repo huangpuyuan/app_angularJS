@@ -75,7 +75,7 @@ __module__ __directive__ 表达式 __service__ injector 依赖注入  模型 fil
 	* 指令：_directive_
 	* 过滤器：_filter_
 	* 控制器：_controller_
-* 路由模块：_router module_ ————~~监听浏览器的哈希值变化加载不同的html代码，称之为视图。
+* 路由模块：_router module_ ————监听浏览器的哈希值变化加载不同的html代码，称之为视图。
 * 视图：_view_（ **MVVM机制** ） 和控制器_controller_ 形成双向数据绑定 视图和控制器的数据相互影响机制。
 	* 核心是 __$scope__ 对象可以在两边同时进行操作
 

@@ -1,23 +1,29 @@
-.position-list{
-	margin: 0;
-	padding:0;
-	.item{
-		margin:0 ;
-		padding: 7px 5px;
-		list-style: none;
-		border-bottom: 1px solid @lineColor;
-		.logo{
-			.w(65);
-			.h(65);
-			margin-right:13px;
-		}
-
-		.title{
-			margin :0;
-		}
-
-		.text{
-			margin:0;
-		}
-	}
+.position-list {
+    margin: 0;
+    padding: 0;
+    .item {
+        margin: 0;
+        padding: 7px 5px;
+        list-style: none;
+        border-bottom: 1px solid @lineColor;
+        .logo {
+            .w(65);
+            .h(65);
+            margin-right: 13px;
+        }
+        .title {
+            .lh(25);
+        }
+        .text {
+            .fs(14);
+            overflow: hidden;
+            white-space:nowrap;
+            text-overflow: ellipsis;
+            margin: 0;
+        }
+        span.text {
+            .ml(20);
+            color: @dangerColor;
+        }
+    }
 }
