@@ -19,7 +19,7 @@ angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$sco
 
     function getCompany(id) {
         $http.get('data/company.json?id=' + id).then(function(resp) {
-        	console.log(resp);
+        	//console.log(resp);
             $scope.company = resp.data;
         });
     };

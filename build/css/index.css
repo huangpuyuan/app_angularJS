@@ -321,6 +321,18 @@
 .login form {
   margin-top: 6.93333333rem;
 }
+.login form .ng-invalid + span {
+  background-color: transparent;
+  position: absolute;
+  color: red;
+  text-align: right;
+  right: 0;
+  height: 100%;
+  font-size: 12px;
+}
+.login form .ng-invalid + span p {
+  margin: 0;
+}
 .login form .form-line {
   margin-left: auto;
   margin-right: auto;
@@ -334,7 +346,7 @@
 .login form .form-line:first-child {
   border-bottom: 1px solid #fff;
 }
-.login form .form-line span {
+.login form .form-line .icon {
   background-color: rgba(0, 0, 0, 0.4);
   height: 100%;
   width: 1.06666667rem;
@@ -389,6 +401,18 @@
 .register form {
   margin-top: 1.6rem;
 }
+.register form .ng-invalid + span {
+  background-color: transparent;
+  position: absolute;
+  color: red;
+  text-align: right;
+  right: 0;
+  height: 100%;
+  font-size: 12px;
+}
+.register form .ng-invalid + span p {
+  margin: 0;
+}
 .register form .form-line {
   margin-left: auto;
   margin-right: auto;
@@ -429,23 +453,16 @@
 .register form .form-line input::-webkit-input-placeholder {
   color: #fff;
 }
-.register form .form-line input.ng-invalid + span {
-  background-color: transparent;
-  position: absolute;
-  color: red;
-  text-align: right;
-  right: 0px;
-  height: 100%;
-  font-size: 12px;
-}
-.register form .form-line input.ng-invalid + span p {
-  margin: 0;
-}
 .register form .message-wrap {
   width: 8rem;
   margin-top: 1.06666667rem;
   margin-left: auto;
   margin-right: auto;
+}
+.register form .message-wrap .ng-invalid + span {
+  right: 110px;
+  top: 10px;
+  height: 0.42666667rem;
 }
 .register form .message-wrap .message-box {
   width: 6.93333333rem;
@@ -470,6 +487,10 @@
   padding: 0 5px;
   line-height: 20px;
   margin-top: 5px;
+}
+.register form .message-wrap .message.disabled {
+  color: #d4d4d4;
+  border-color: #d4d4d4;
 }
 .register form button {
   width: 8rem;
