@@ -2,6 +2,118 @@
 
  angular.module('app',['ui.router','ngCookies','validation']);
 
+'use strict';
+
+angular.module('app').value('dict', {}).run(['$http','dict', function($http,dict) {
+    $http.get('data/city.json').then(function(resp) {
+        dict.city = resp.data;
+    });
+    $http.get('data/salary.json').then(function(resp) {
+        dict.salary = resp.data;
+    });
+    $http.get('data/scale.json').then(function(resp) {
+        dict.scale = resp.data;
+    });
+}]);
+
+'use strict';
+
+angular.module('app').config(['$provide', function($provide) {
+    $provide.decorator('$http', ['$delegate', '$q', function($delegate, $q) {
+        $delegate.post = function(url, data, config) {
+            var def = $q.defer();
+            $delegate.get(url).then(function(resp) {
+                def.resolve(resp);
+            }, function(err) {
+                def.reject(err);
+            });
+            return {
+                then: function(f1, f2) {
+                    def.promise.then(f1, f2);
+                }
+            }
+        }
+        return $delegate;
+    }]);
+}]);
+
+'use strict';
+
+angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+    $stateProvider.state('main', {
+        url: '/main',
+        templateUrl: 'view/main.html',
+        controller: 'mainCtrl'
+    }).state('position', {
+        url: '/position/:id',
+        templateUrl: 'view/position.html',
+        controller: 'positionCtrl'
+    }).state('company', {
+        url: '/company/:id',
+        templateUrl: 'view/company.html',
+        controller: 'companyCtrl'
+    }).state('search', {
+        url: '/search',
+        templateUrl: 'view/search.html',
+        controller: 'searchCtrl'
+    }).state('login', {
+        url: '/login',
+        templateUrl: 'view/login.html',
+        controller: 'loginCtrl'
+    }).state('register', {
+        url: '/register',
+        templateUrl: 'view/register.html',
+        controller: 'registerCtrl'
+    }).state('my', {
+        url: '/my',
+        templateUrl: 'view/my.html',
+        controller: 'myCtrl'
+    }).state('post', {
+        url: '/post',
+        templateUrl: 'view/post.html',
+        controller: 'postCtrl'
+    }).state('favorite', {
+        url: '/favorite',
+        templateUrl: 'view/favorite.html',
+        controller: 'favoriteCtrl'
+    });
+
+    $urlRouterProvider.otherwise('main');
+}]);
+
+'use strict';
+
+angular.module('app').config(['$validationProvider', function($validationProvider) {
+    var expression = {
+        phone: /^1[\d]{10}$/,
+        password: function(value) {
+            var str = value + '';
+            return str.length > 5;
+        },
+        required:function(value){
+            return !!value;
+        }
+    };
+    var defaultMsg = {
+        phone: {
+            success: '',
+            error: '必须是11位手机号'
+        },
+        password: {
+            success: '',
+            error: '长度至少6位'
+        },
+        required: {
+            success: '',
+            error: '不能为空'
+        }
+
+    };
+
+    $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
+}]);
+
 "use strict";
 angular.module('app').controller('companyCtrl',['$http','$state','$scope',function($http,$state,$scope){
 	$http.get('data/company.json?id='+$state.params.id).then(function(resp){
@@ -357,27 +469,6 @@ angular.module('app').directive('appTab', [function() {
 
 'use strict';
 
-angular.module('app').filter('filterByObj', [function() {
-    return function(list, obj) {	
-        var result = [];
-        angular.forEach(list, function(item) {
-            var isEqual = true;
-            for (var e in obj) {
-                if (item[e] !== obj[e]) {
-                    isEqual = false;
-                };
-            };
-            if (isEqual) {
-                result.push(item);
-            };
-
-        });
-        return result;
-    }
-}]);
-
-'use strict';
-
 
 angular.module('app')
 //   .service('cache',['$cookies',function($cookies){
@@ -410,112 +501,21 @@ angular.module('app')
 }]);
 'use strict';
 
-angular.module('app').value('dict', {}).run(['$http','dict', function($http,dict) {
-    $http.get('data/city.json').then(function(resp) {
-        dict.city = resp.data;
-    });
-    $http.get('data/salary.json').then(function(resp) {
-        dict.salary = resp.data;
-    });
-    $http.get('data/scale.json').then(function(resp) {
-        dict.scale = resp.data;
-    });
-}]);
+angular.module('app').filter('filterByObj', [function() {
+    return function(list, obj) {	
+        var result = [];
+        angular.forEach(list, function(item) {
+            var isEqual = true;
+            for (var e in obj) {
+                if (item[e] !== obj[e]) {
+                    isEqual = false;
+                };
+            };
+            if (isEqual) {
+                result.push(item);
+            };
 
-'use strict';
-
-angular.module('app').config(['$provide', function($provide) {
-    $provide.decorator('$http', ['$delegate', '$q', function($delegate, $q) {
-        $delegate.post = function(url, data, config) {
-            var def = $q.defer();
-            $delegate.get(url).then(function(resp) {
-                def.resolve(resp);
-            }, function(err) {
-                def.reject(err);
-            });
-            return {
-                then: function(f1, f2) {
-                    def.promise.then(f1, f2);
-                }
-            }
-        }
-        return $delegate;
-    }]);
-}]);
-
-'use strict';
-
-angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-
-    $stateProvider.state('main', {
-        url: '/main',
-        templateUrl: 'view/main.html',
-        controller: 'mainCtrl'
-    }).state('position', {
-        url: '/position/:id',
-        templateUrl: 'view/position.html',
-        controller: 'positionCtrl'
-    }).state('company', {
-        url: '/company/:id',
-        templateUrl: 'view/company.html',
-        controller: 'companyCtrl'
-    }).state('search', {
-        url: '/search',
-        templateUrl: 'view/search.html',
-        controller: 'searchCtrl'
-    }).state('login', {
-        url: '/login',
-        templateUrl: 'view/login.html',
-        controller: 'loginCtrl'
-    }).state('register', {
-        url: '/register',
-        templateUrl: 'view/register.html',
-        controller: 'registerCtrl'
-    }).state('my', {
-        url: '/my',
-        templateUrl: 'view/my.html',
-        controller: 'myCtrl'
-    }).state('post', {
-        url: '/post',
-        templateUrl: 'view/post.html',
-        controller: 'postCtrl'
-    }).state('favorite', {
-        url: '/favorite',
-        templateUrl: 'view/favorite.html',
-        controller: 'favoriteCtrl'
-    });
-
-    $urlRouterProvider.otherwise('main');
-}]);
-
-'use strict';
-
-angular.module('app').config(['$validationProvider', function($validationProvider) {
-    var expression = {
-        phone: /^1[\d]{10}$/,
-        password: function(value) {
-            var str = value + '';
-            return str.length > 5;
-        },
-        required:function(value){
-            return !!value;
-        }
-    };
-    var defaultMsg = {
-        phone: {
-            success: '',
-            error: '必须是11位手机号'
-        },
-        password: {
-            success: '',
-            error: '长度至少6位'
-        },
-        required: {
-            success: '',
-            error: '不能为空'
-        }
-
-    };
-
-    $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
+        });
+        return result;
+    }
 }]);
