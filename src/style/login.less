@@ -1,25 +1,52 @@
 .login {
     background: url(../image/background.png) no-repeat;
     background-size: 100% 100%;
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     form {
         .mt(260);
-        input {
+        .form-line {
             margin-left: auto;
             margin-right: auto;
             .w(300);
             .h(40);
-            border-width:0;
-            background-color: @formBgColor;
-            outline-width: 0;
+            .lh(40);
             color: @defaultColor;
-            &:first-child{
-            	border-bottom:1px solid @defaultColor; 
-            } 
+            box-sizing: content-box;
+            font-size: 0;
+            &:first-child {
+                border-bottom: 1px solid @defaultColor;
+            }
+            span {
+                background-color: @iconBgColor;
+                height: 100%;
+                .w(40);
+                background-position: 10px;
+                background-repeat: no-repeat;
+            }
+            .account {
+                background-image: url(../image/account.png);
+            }
+            .lock {
+                background-image: url(../image/lock.png);
+            }
+            input {
+            	.w(260);
+            	height: 100%;
+                border-width: 0;
+                background-color: @formBgColor;
+                outline-width: 0;
+                box-sizing: border-box;
+                color: @defaultColor;
+                .pl(30);
+                .fs(14); 
+                &::-webkit-input-placeholder {
+                    color: @defaultColor;
+                }
+            }
         }
         button {
             .w(300);

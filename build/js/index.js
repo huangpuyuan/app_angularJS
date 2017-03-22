@@ -1,6 +1,6 @@
  'use strict';
 
- angular.module('app',['ui.router','ngCookies']);
+ angular.module('app',['ui.router','ngCookies','validation']);
 
 'use strict';
 
@@ -59,6 +59,31 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function($
     });
 
     $urlRouterProvider.otherwise('main');
+}]);
+
+'use strict';
+
+angular.module('app').config(['$validationProvider', function($validationProvider) {
+    var expression = {
+        phone: /^1[\d]{10}/,
+        password: function(value) {
+            var str = value + '';
+            return str.length > 5;
+        }
+    };
+    var defaultMsg = {
+        phone: {
+            success: '',
+            error: '必须是11位手机号'
+        },
+        password: {
+            success: '',
+            error: '长度至少6位'
+        }
+
+    };
+
+    $validationProvider.setExpression(expression).setDefaultMsg(defaultMsg);
 }]);
 
 "use strict";
@@ -155,16 +180,45 @@ angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$sco
 "use strict";
 
 angular.module('app').controller('postCtrl', ['$http', '$scope', function($http, $scope) {
-
-
-  }]);
+    $scope.tabList = [{
+        id: 'all',
+        name: '全部'
+    }, {
+        id: 'pass',
+        name:'面试邀请'
+    },{
+    	id:'fail',
+    	name:'不合适'
+    }]
+}]);
 
 "use strict";
 
-angular.module('app').controller('regisiterCtrl', ['$http', '$scope', function($http, $scope) {
+angular.module('app').controller('registerCtrl', ['$interval', '$http', '$scope', function($interval, $http, $scope) {
+    $scope.submit = function() {
+        console.log($scope.user);
+    };
+    var count = 60;
+    $scope.send = function() {
+        $http.get('data/code.json').then(function(resp) {
+            if (resp.data.state === 1) {
+                count = 60;
+                $scope.time = '60s';
+                var interval = $interval(function() {
+                    if (count <= 0) {
+                        $interval.cancel(interval);
+                        $scope.time = '';
+                        return;
+                    } else {
+                        count--;
+                        $scope.time = count + 's';
+                    }
+                }, 1000)
+            }
+        });
+    };
 
-
-  }]);
+}]);
 
 "use strict";
 angular.module('app').controller('searchCtrl', ['dict', '$scope', '$http', function(dict, $scope, $http) {
@@ -230,6 +284,27 @@ angular.module('app').controller('searchCtrl', ['dict', '$scope', '$http', funct
         }
     };
 
+}]);
+
+'use strict';
+
+angular.module('app').filter('filterByObj', [function() {
+    return function(list, obj) {	
+        var result = [];
+        angular.forEach(list, function(item) {
+            var isEqual = true;
+            for (var e in obj) {
+                if (item[e] !== obj[e]) {
+                    isEqual = false;
+                };
+            };
+            if (isEqual) {
+                result.push(item);
+            };
+
+        });
+        return result;
+    }
 }]);
 
 'use strict';
@@ -372,27 +447,6 @@ angular.module('app').directive('appTab', [function() {
             };
         }
 
-    }
-}]);
-
-'use strict';
-
-angular.module('app').filter('filterByObj', [function() {
-    return function(list, obj) {	
-        var result = [];
-        angular.forEach(list, function(item) {
-            var isEqual = true;
-            for (var e in obj) {
-                if (item[e] !== obj[e]) {
-                    isEqual = false;
-                };
-            };
-            if (isEqual) {
-                result.push(item);
-            };
-
-        });
-        return result;
     }
 }]);
 
