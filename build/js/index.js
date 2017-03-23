@@ -129,8 +129,9 @@ angular.module('app').controller('companyCtrl',['$http','$state','$scope',functi
 "use strict";
 
 angular.module('app').controller('favoriteCtrl', ['$http', '$scope', function($http, $scope) {
-
-
+	$http.get('data/myFavorite.json').then(function(resp){
+		$scope.list = resp.data;
+	});
   }]);
 
 "use strict";
@@ -176,10 +177,20 @@ angular.module('app').controller('mainCtrl',['$http','$scope',function($http,$sc
 }]);
 "use strict";
 
-angular.module('app').controller('myCtrl', ['$http', '$scope', function($http, $scope) {
+angular.module('app').controller('myCtrl', ['$state','cache','$http', '$scope', function($state,cache,$http, $scope) {
 
+		if(cache.get('name')){
+			$scope.name = cache.get('name');
+			$scope.image = cache.get('image'); 
+		}
 
-  }]);
+		$scope.logout = function(){
+			cache.remove('id');
+			cache.remove('name');
+			cache.remove('image');
+			$state.go('main');
+		}
+ }]);
 
 "use strict";
 angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$scope','cache', function($q, $http, $state, $scope,cache) {
@@ -220,11 +231,31 @@ angular.module('app').controller('postCtrl', ['$http', '$scope', function($http,
         name: '全部'
     }, {
         id: 'pass',
-        name:'面试邀请'
-    },{
-    	id:'fail',
-    	name:'不合适'
-    }]
+        name: '面试邀请'
+    }, {
+        id: 'fail',
+        name: '不合适'
+    }];
+
+    $http.get('data/myPost.json').then(function(res) {
+        $scope.positionList = res.data;
+    });
+    
+    $scope.filterObj = {};
+
+    $scope.tClick = function(id, name) {
+        switch (id) {
+            case 'all':
+                delete $scope.filterObj.state;
+                break;
+            case 'pass':
+                $scope.filterObj.state = "1";
+                break;
+            case 'fail':
+                $scope.filterObj.state = "-1";
+                break;
+        }
+    };
 }]);
 
 "use strict";
@@ -421,14 +452,26 @@ angular.module('app').directive('appPositionInfo', [function() {
 
 'use strict';
 
-angular.module('app').directive('appPositionList', [function() {
+angular.module('app').directive('appPositionList', ['$http', function($http) {
     return {
         restrict: 'A',
         replace: true,
         templateUrl: 'view/template/positionList.html',
         scope: {
             data: '=',
-            filterObj:'='
+            filterObj: '=',
+            isFavorite:'='
+        },
+        link: function($scope) {
+            //$scope.name = cache.get('name') || '';
+            $scope.select = function(item) {
+                $http.post('data/favorite.json', {
+                    id: item.id,
+                    select: !item.select
+                }).then(function(resp) {
+                    item.select = !item.select;
+                });
+            }
         }
     };
 }]);

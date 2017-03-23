@@ -89,6 +89,20 @@
   margin-left: 0.53333333rem;
   color: red;
 }
+.position-list .item .icon {
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 0.8rem;
+  height: 0.74666667rem;
+  top: 14px;
+  right: 12px;
+}
+.position-list .item .icon.star {
+  background-image: url(../image/star.png);
+}
+.position-list .item .icon.star-active {
+  background-image: url(../image/star-active.png);
+}
 .position-info {
   border-bottom: 1px solid #ccc;
   padding: 26px 10px 18px;
@@ -516,6 +530,13 @@
 .my .name {
   margin-top: 0.66666667rem;
 }
+.my .login-btn {
+  background-color: #12d5b5;
+  width: 8.8rem;
+  height: 1.06666667rem;
+  margin-top: 5.33333333rem;
+  font-size: 0.42666667rem;
+}
 .my .btns {
   margin-top: 1.06666667rem;
 }
@@ -533,6 +554,9 @@
   width: 8.8rem;
   height: 1.06666667rem;
   margin-top: 0.53333333rem;
+}
+.my-post {
+  margin-top: 1.06666667rem;
 }
 html,
 body {
