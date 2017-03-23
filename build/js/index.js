@@ -381,11 +381,14 @@ angular.module('app').directive('appFoot', [function() {
 
 'use strict';
 
-angular.module('app').directive('appHead', [function(){
+angular.module('app').directive('appHead', ['cache',function(cache){
     return {
     	restrict:'A',
     	replace:true,
-    	templateUrl: 'view/template/head.html'
+    	templateUrl: 'view/template/head.html',
+    	link:function($scope){
+    		$scope.name = cache.get('name')||'';
+    	}
 
     }
 }]);
@@ -512,6 +515,27 @@ angular.module('app').directive('appTab', [function() {
 
 'use strict';
 
+angular.module('app').filter('filterByObj', [function() {
+    return function(list, obj) {	
+        var result = [];
+        angular.forEach(list, function(item) {
+            var isEqual = true;
+            for (var e in obj) {
+                if (item[e] !== obj[e]) {
+                    isEqual = false;
+                };
+            };
+            if (isEqual) {
+                result.push(item);
+            };
+
+        });
+        return result;
+    }
+}]);
+
+'use strict';
+
 
 angular.module('app')
 //   .service('cache',['$cookies',function($cookies){
@@ -541,24 +565,4 @@ angular.module('app')
 	 		 	$cookies.remove(key);
 	 		}
 	}
-}]);
-'use strict';
-
-angular.module('app').filter('filterByObj', [function() {
-    return function(list, obj) {	
-        var result = [];
-        angular.forEach(list, function(item) {
-            var isEqual = true;
-            for (var e in obj) {
-                if (item[e] !== obj[e]) {
-                    isEqual = false;
-                };
-            };
-            if (isEqual) {
-                result.push(item);
-            };
-
-        });
-        return result;
-    }
 }]);
