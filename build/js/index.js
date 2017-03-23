@@ -193,17 +193,19 @@ angular.module('app').controller('myCtrl', ['$state','cache','$http', '$scope', 
  }]);
 
 "use strict";
-angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$scope','cache', function($q, $http, $state, $scope,cache) {
-    
-    cache.put('to','you');
-    console.log(cache.get('to'));    
+angular.module('app').controller('positionCtrl', ['$log', '$q', '$http', '$state', '$scope', 'cache', function($log, $q, $http, $state, $scope, cache) {
 
-    $scope.isLogin = false;
+    $scope.isLogin = !!cache.get('name');
+    $scope.message = $scope.isLogin ? '投个简历' : '去登入';
 
     function getPosition() {
         var def = $q.defer();
         $http.get('data/position.json?id=' + $state.params.id).then(function(resp) {
             $scope.position = resp.data;
+            if (resp.data.posted) {
+                $scope.message = '已投递';
+            }
+
             def.resolve(resp);
         }, function(err) {
             def.reject(err);
@@ -213,14 +215,32 @@ angular.module('app').controller('positionCtrl', ['$q', '$http', '$state', '$sco
 
     function getCompany(id) {
         $http.get('data/company.json?id=' + id).then(function(resp) {
-        	//console.log(resp);
+            //console.log(resp);
             $scope.company = resp.data;
         });
     };
     getPosition().then(function(obj) {
-    	//console.log(obj);
+        //console.log(obj);
         getCompany(obj.data.companyId);
     });
+
+
+
+    $scope.go = function() {
+
+        if ($scope.message !== '已投递') {
+            if ($scope.isLogin) {
+                $http.post('data/handle.json', {
+                    id: $scope.position.id
+                }).then(function(resp) {
+                    $log.info(resp.data);
+                    $scope.message = '已投递';
+                })
+            } else {
+                $state.go('login');
+            }
+        }
+    }
 }]);
 
 "use strict";
@@ -437,7 +457,7 @@ angular.module('app').directive('appPositionClass', [function(){
 
 'use strict';
 
-angular.module('app').directive('appPositionInfo', [function() {
+angular.module('app').directive('appPositionInfo', ['$http', function($http) {
     return {
         restrict: 'A',
         replace: true,
@@ -447,8 +467,23 @@ angular.module('app').directive('appPositionInfo', [function() {
             isLogin: '=',
             pos: '='
         },
-        link: function(scope) {
-            scope.imagePath = scope.isActive ? 'image/star-active.png' : 'image/star.png';
+        link: function($scope) {
+            $scope.$watch('pos', function(newVal) {
+                if (newVal) {
+                    $scope.pos.select = $scope.pos.select || false;
+                    $scope.imagePath = $scope.pos.select ? 'image/star-active.png' : 'image/star.png';
+                };
+            });
+
+            $scope.favorite = function() {
+                $http.post('data/favorite.json', {
+                    id: $scope.pos.id,
+                    select: !$scope.pos.select
+                }).then(function(resp) {
+                    $scope.pos.select = !$scope.pos.select;
+                    $scope.imagePath = $scope.pos.select ? 'image/star-active.png' : 'image/star.png';
+                });
+            }
         }
     }
 }]);
@@ -463,7 +498,7 @@ angular.module('app').directive('appPositionList', ['$http', function($http) {
         scope: {
             data: '=',
             filterObj: '=',
-            isFavorite:'='
+            isFavorite:'='	
         },
         link: function($scope) {
             //$scope.name = cache.get('name') || '';

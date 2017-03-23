@@ -8,7 +8,7 @@ angular.module('app').directive('appPositionList', ['$http', function($http) {
         scope: {
             data: '=',
             filterObj: '=',
-            isFavorite:'='
+            isFavorite:'='	
         },
         link: function($scope) {
             //$scope.name = cache.get('name') || '';
