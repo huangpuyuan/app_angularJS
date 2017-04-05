@@ -512,6 +512,7 @@ angular.module('app').directive('appPositionList', ['$http', function($http) {
             }
         }
     };
+    
 }]);
 
 'use strict';

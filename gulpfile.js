@@ -13,7 +13,7 @@ gulp.task('lib', function() {
     gulp.src('bower_components/**/*.js')
         .pipe(gulp.dest(app.devPath + 'vendor'))
         .pipe(gulp.dest(app.prdPath + 'vendor'))
-        .pipe($.connect.reload()); 
+        .pipe($.connect.reload());
 });
 
 gulp.task('html', function() {
@@ -29,7 +29,7 @@ gulp.task('json', function() {
         .pipe($.plumber())
         .pipe(gulp.dest(app.devPath + 'data'))
         .pipe(gulp.dest(app.prdPath + 'data'))
-        .pipe($.connect.reload()); 
+        .pipe($.connect.reload());
 });
 
 gulp.task('less', function() {
@@ -67,18 +67,18 @@ gulp.task('build', ['image', 'js', 'less', 'lib', 'html', 'json']);
 gulp.task('clean', function() {
     gulp.src([app.devPath, app.prdPath])
         .pipe($.clean());
-}); 
+});
 
 gulp.task('serve', ['build'], function() {
     $.connect.server({
         root: [app.devPath],
         livereload: true,
         port: 1234
-});
+    });
     open("http://localhost:1234");
 
 
-//自动化监控及构建
+    //自动化监控及构建
     gulp.watch('bower_components/**/*', ['lib']);
 
     gulp.watch(app.srcPath + '**/*.html', ['html']);
@@ -86,7 +86,7 @@ gulp.task('serve', ['build'], function() {
     gulp.watch(app.srcPath + 'style/**/*.less', ['less']);
     gulp.watch(app.srcPath + 'script/**/*.js', ['js']);
     gulp.watch(app.srcPath + 'image/**/*', ['image']);
-})
+});
 
 
 gulp.task('default', ['serve']);
